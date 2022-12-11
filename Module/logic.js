@@ -2,7 +2,7 @@
 console.log("working");
 
 //Create map object
-let map = L.map('mapid').setView([36.1733, -120.1794],7);
+let map = L.map('mapid').setView([37.5, -122.5],10);
 
 //coordinates to be used for line
 let line = [
@@ -14,9 +14,47 @@ let line = [
 
 // Create a polyline using the line coordinates and make the line red.
 L.polyline(line,{
-    color:"yellow",
-    dasharray:"4"
+    color:"yellow"
 }).addTo(map);
+
+// Add GeoJSON data.
+let sanFranAirport =
+{"type":"FeatureCollection","features":[{
+    "type":"Feature",
+    "properties":{
+        "id":"3469",
+        "name":"San Francisco International Airport",
+        "city":"San Francisco",
+        "country":"United States",
+        "faa":"SFO",
+        "icao":"KSFO",
+        "alt":"14",
+        "tz-offset":"-8",
+        "dst":"A",
+        "tz":"America/Los_Angeles"},
+        "geometry":{
+            "type":"Point",
+            "coordinates":[-122.375,37.61899948120117]}}
+]};
+
+//Adding a GeoJSON layer to map
+//L.geoJSON(sanFranAirport,{
+    //turning features into markers on map
+    //pointToLayer:function(feature,latlng){
+        //console.log(feature);
+        //return L.marker(latlng)
+        //.bindPopup("<h2>" + feature.properties.name + "</h2><hr>" + feature.properties.city + ","+ feature.properties.country + "</h3>")
+    //}
+//}).addTo(map);
+L.geoJSON(sanFranAirport,{
+    onEachFeature: function(feature,layer){
+        console.log(layer);
+        layer.bindPopup("<h2> Airport Code:" + feature.properties.faa + "</h2><hr>"+"<h2 Airport Name>" + feature.properties.name + "</h3>");
+        return L.marker(layer)
+     
+    }
+}).addTo(map)
+
 
 // We create the tile layer that will be the background of our map.
 let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
