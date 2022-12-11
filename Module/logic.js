@@ -2,7 +2,7 @@
 console.log("working");
 
 //Create map object
-let map = L.map('mapid').setView([37.5, -122.5],10);
+let map = L.map('mapid').setView([30, 30],2);
 
 //coordinates to be used for line
 let line = [
@@ -62,6 +62,17 @@ attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStree
     maxZoom: 18,
     accessToken: API_KEY
 });
+
+//loading external airport data
+let airportData = "https://raw.githubusercontent.com/SamvsP4K/Mapping_Earthquakes/main/majorAirports.json";
+
+// Grabbing our GeoJSON data.
+d3.json(airportData).then(function(data) {
+    console.log(data);
+  // Creating a GeoJSON layer with the retrieved data.
+  L.geoJSON(data).addTo(map);
+});
+
 
 // Get data from cities.js
 let cityData = cities;
