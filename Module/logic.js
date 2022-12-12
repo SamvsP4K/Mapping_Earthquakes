@@ -1,8 +1,10 @@
 // Add console.log to check to see if our code is working.
 console.log("working");
 
-//Create map object
-let map = L.map('mapid').setView([30, 30],2);
+//Create map object w setview method
+//let map = L.map('mapid').setView([30, 30],2);
+
+
 
 //coordinates to be used for line
 let line = [
@@ -57,11 +59,35 @@ L.geoJSON(sanFranAirport,{
 
 
 // We create the tile layer that will be the background of our map.
-let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
     accessToken: API_KEY
 });
+// We create the dark view tile layer that will be an option for our map.
+let dark = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    accessToken: API_KEY
+});
+
+// Create a base layer that holds both maps.
+let baseMaps = {
+    Street: streets,
+    Dark: dark
+  };
+
+//create map object alternative way w curly braces
+
+let map = L.map("mapid", {
+    center: [40.7, -94.5],
+    zoom: 4
+  });
+
+// Pass our map layers into our layers control and add the layers control to the map.
+L.control.layers(baseMaps).addTo(map);
+
+
 
 //loading external airport data
 let airportData = "https://raw.githubusercontent.com/SamvsP4K/Mapping_Earthquakes/main/majorAirports.json";
